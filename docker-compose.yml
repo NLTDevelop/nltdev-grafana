@@ -2,22 +2,24 @@ version: "3.9"
 services:
   grafana:
     image: grafana/grafana:8.5.3-ubuntu
+    environment:
+      - GF_SERVER_HTTP_PORT=13000
     ports:
-      - "13000:3000"
+      - "13000:13000"
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-configs:/etc/grafana
   prometheus:
     image: prom/prometheus:v2.36.0
     ports:
-      - "19090:9090"
+      - "9090:9090"
     volumes:
       - prom-data:/prometheus
       - prom-configs:/etc/prometheus
   node-exporter:
     image: prom/node-exporter:v1.3.1
     ports:
-      - "19100:9100"
+      - "9100:9100"
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
