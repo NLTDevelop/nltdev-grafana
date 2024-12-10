@@ -4,6 +4,7 @@ networks:
 services:
   loki:
     image: grafana/loki:latest
+    user: "$UID:$GID"
     ports:
       - "3131:3131"
     restart: unless-stopped
@@ -16,7 +17,7 @@ services:
 
   grafana:
     image: grafana/grafana:latest
-    user: "1000"
+    user: "$UID:$GID"
     environment:
       - GF_SERVER_HTTP_PORT=13000
     ports:
