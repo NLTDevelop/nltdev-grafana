@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./loki-config.yml:/etc/loki/loki-config.yml
-      - ~/loki-data:/loki
+      - ../loki-data:/loki
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - monitoring
@@ -23,7 +23,7 @@ services:
     ports:
       - "13000:13000"
     volumes:
-      - ~/grafana/data:/var/lib/grafana
+      - ../grafana/data:/var/lib/grafana
     networks:
       - monitoring
 
