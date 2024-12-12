@@ -1,21 +1,43 @@
-version: "3.9"
+networks:
+  monitoring:
+
 services:
+  loki:
+    image: grafana/loki:latest
+    user: "$UID:$GID"
+    ports:
+      - "3131:3131"
+    restart: unless-stopped
+    volumes:
+      - ./loki-config.yml:/etc/loki/loki-config.yml
+      - ~/loki-data:/loki
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - monitoring
+
   grafana:
-    image: grafana/grafana:8.5.3-ubuntu
+    image: grafana/grafana:latest
+    user: "$UID:$GID"
     environment:
       - GF_SERVER_HTTP_PORT=13000
     ports:
       - "13000:13000"
     volumes:
-      - grafana-data:/var/lib/grafana
-      - grafana-configs:/etc/grafana
+      - ~/grafana/data:/var/lib/grafana
+    networks:
+      - monitoring
+
   prometheus:
     image: prom/prometheus:v2.36.0
     ports:
       - "9090:9090"
     volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prom-data:/prometheus
       - prom-configs:/etc/prometheus
+    networks:
+      - monitoring
+
   node-exporter:
     image: prom/node-exporter:v1.3.1
     ports:
@@ -29,6 +51,9 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude'
       - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
+    networks:
+      - monitoring
+
 volumes:
   grafana-data:
   grafana-configs:
