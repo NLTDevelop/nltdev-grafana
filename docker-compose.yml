@@ -4,26 +4,26 @@ networks:
 services:
   loki:
     image: grafana/loki:latest
-    user: "$UID:$GID"
+    user: "1000:1000" # UID:GID ubuntu id -u id -g
     ports:
       - "3131:3131"
     restart: unless-stopped
     volumes:
       - ./loki-config.yml:/etc/loki/loki-config.yml
-      - ~/loki-data:/loki
+      - /home/ubuntu/loki-data:/loki
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - monitoring
 
   grafana:
     image: grafana/grafana:latest
-    user: "$UID:$GID"
+    user: "1000:1000" # UID:GID ubuntu id -u id -g
     environment:
       - GF_SERVER_HTTP_PORT=13000
     ports:
       - "13000:13000"
     volumes:
-      - ~/grafana/data:/var/lib/grafana
+      - /home/ubuntu/grafana/data:/var/lib/grafana
     networks:
       - monitoring
 

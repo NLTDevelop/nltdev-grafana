@@ -37,6 +37,9 @@ limits_config:
   allow_structured_metadata: false
   volume_enabled: true
   retention_period: 168h
+  retention_stream:
+    - selector: '{job=".*"}'
+      period: 168h
 
 
 ruler:
